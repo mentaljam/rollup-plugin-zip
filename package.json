@@ -1,0 +1,44 @@
+{
+  "name": "rollup-plugin-zip",
+  "version": "0.1.0",
+  "description": "Rollup plugin to zip up emitted files.",
+  "homepage": "https://github.com/mentaljam/rollup-plugin-zip",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://github.com/mentaljam/rollup-plugin-zip"
+  },
+  "bugs": {
+    "url": "https://github.com/mentaljam/rollup-plugin-zip/issues"
+  },
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.es.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rollup -c",
+    "install": "npm run build",
+    "lint": "tslint -p .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "rollup",
+    "plugin",
+    "zip"
+  ],
+  "author": "Petr Tsymbarovich <petr@tsymbarovich.ru>",
+  "license": "MIT",
+  "dependencies": {
+    "yazl": "^2.5.1"
+  },
+  "devDependencies": {
+    "@types/yazl": "^2.4.1",
+    "rollup": "^1.5.0",
+    "rollup-plugin-tslint": "^0.2.2",
+    "rollup-plugin-typescript2": "^0.19.3",
+    "tslint": "^5.13.1",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^3.3.3333"
+  },
+  "peerDependencies": {
+    "rollup": ">=1.5.0"
+  }
+}

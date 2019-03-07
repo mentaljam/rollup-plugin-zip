@@ -1,0 +1,15 @@
+{
+  "name": "rollup-plugin-zip-example",
+  "version": "1.0.0",
+  "description": "Usage example for the rollup-plugin-zip.",
+  "scripts": {
+    "build": "rollup -c"
+  },
+  "author": "Petr Tsymbarovich <petr@tsymbarovich.ru>",
+  "license": "MIT",
+  "devDependencies": {
+    "rollup": "^1.5.0",
+    "rollup-plugin-copy2": "git@github.com:mentaljam/rollup-plugin-copy2.git",
+    "rollup-plugin-zip": "../"
+  }
+}
