@@ -17,7 +17,7 @@ const enum Cache {
 }
 
 export default (options?: IPluginOptions): Plugin => ({
-  name: 'zip-plugin',
+  name: 'zip',
   generateBundle({dir}) {
     // Save the output directory path
     let outDir = process.cwd()
