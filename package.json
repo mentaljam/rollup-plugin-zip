@@ -1,6 +1,6 @@
 {
   "name": "rollup-plugin-zip",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Rollup plugin to zip up emitted files.",
   "homepage": "https://github.com/mentaljam/rollup-plugin-zip",
   "repository": {
@@ -20,7 +20,6 @@
   ],
   "scripts": {
     "build": "rollup -c",
-    "install": "npm run build",
     "lint": "tslint -p .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
