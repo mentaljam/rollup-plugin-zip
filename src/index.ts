@@ -1,11 +1,10 @@
 import * as fs from 'fs'
 import * as path from 'path'
-import {OutputAsset, OutputChunk, Plugin} from 'rollup'
+import {OutputAsset, Plugin} from 'rollup'
 import {ZipFile} from 'yazl'
 
 
 const isAsset = (entry: any): entry is OutputAsset => !!entry.isAsset
-const isChunk = (entry: any): entry is OutputChunk => !!entry.isEntry
 
 interface IPluginOptions {
   file?: string
@@ -44,16 +43,14 @@ export default (options?: IPluginOptions): Plugin => ({
   writeBundle(bundle) {
     const outDir = this.cache.get(Cache.outdir)
     const zipFile = new ZipFile()
-    Object.entries(bundle).forEach(([name, entry]) => {
+    Object.entries(bundle).forEach(([_, entry]) => {
       if (isAsset(entry)) {
         const {fileName, source} = entry
         const buffer = Buffer.isBuffer(source) ? source : new Buffer(source)
         zipFile.addBuffer(buffer, fileName)
-      } else if (isChunk(entry)) {
+      } else {
         const {fileName} = entry
         zipFile.addFile(path.resolve(outDir, fileName), fileName)
-      } else {
-        this.error(`Unknown bundle entry type for "${name}"`)
       }
     })
     const outFile = this.cache.get(Cache.outfile)
