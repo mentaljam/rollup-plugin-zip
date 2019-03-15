@@ -37,8 +37,8 @@ export default (options?: IPluginOptions): Plugin => ({
         outFile += '-' + npm_package_version
       }
       outFile = path.resolve(outDir, outFile + '.zip')
-      this.cache.set(Cache.outfile, outFile)
     }
+    this.cache.set(Cache.outfile, outFile)
   },
   writeBundle(bundle) {
     const outDir = this.cache.get(Cache.outdir)
