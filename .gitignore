@@ -1,4 +1,4 @@
 .rpt2_cache/
-dist/
+dist*/
 node_modules/
 example/package-lock.json

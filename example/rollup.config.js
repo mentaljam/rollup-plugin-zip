@@ -2,10 +2,13 @@ import copy from 'rollup-plugin-copy2'
 import zip from 'rollup-plugin-zip'
 
 
-export default {
+const config = ({
+  dir,
+  options,
+}) => ({
   input: 'index.js',
   output: {
-    dir: 'dist',
+    dir,
     format: 'es',
   },
   plugins: [
@@ -15,6 +18,24 @@ export default {
         ['data.txt', 'assets/data.txt'],
       ],
     }),
-    zip(),
+    zip(options),
   ],
-}
+})
+
+export default [
+  config({
+    dir: 'dist_nooptions'
+  }),
+  config({
+    dir: 'dist_file',
+    options: {
+      file: 'bundle.zip'
+    }
+  }),
+  config({
+    dir: 'dist_dir',
+    options: {
+      dir: 'dist_dir/output',
+    }
+  })
+]

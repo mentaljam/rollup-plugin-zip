@@ -8,10 +8,11 @@ const isAsset = (entry: any): entry is OutputAsset => !!entry.isAsset
 
 interface IPluginOptions {
   file?: string
+  dir?: string
 }
 
 const enum Cache {
-  outdir = 'outdir',
+  distdir = 'distdir',
   outfile = 'outfile',
 }
 
@@ -19,16 +20,20 @@ export default (options?: IPluginOptions): Plugin => ({
   name: 'zip',
   generateBundle({dir}) {
     // Save the output directory path
-    let outDir = process.cwd()
+    let distDir = process.cwd()
     if (dir) {
-      outDir = path.resolve(outDir, dir)
+      distDir = path.resolve(distDir, dir)
     }
-    this.cache.set(Cache.outdir, outDir)
-    // Save the output file path
+    this.cache.set(Cache.distdir, distDir)
+    // Get options
     let outFile = options && options.file
+    const outDir = options && options.dir
     if (outFile) {
+      if (outDir) {
+        this.warn('Both the `file` and `dir` options are set - `dir` has no effect')
+      }
       if (!path.isAbsolute(outFile)) {
-        outFile = path.resolve(outDir, outFile)
+        outFile = path.resolve(distDir, outFile)
       }
     } else {
       const {npm_package_name, npm_package_version} = process.env
@@ -36,12 +41,16 @@ export default (options?: IPluginOptions): Plugin => ({
       if (npm_package_version) {
         outFile += '-' + npm_package_version
       }
-      outFile = path.resolve(outDir, outFile + '.zip')
+      if (outDir && !(fs.existsSync(outDir) && fs.statSync(outDir).isDirectory())) {
+        fs.mkdirSync(outDir, {recursive: true})
+      }
+      outFile = path.resolve(outDir || distDir, outFile + '.zip')
     }
+    // Save the output file path
     this.cache.set(Cache.outfile, outFile)
   },
   writeBundle(bundle) {
-    const outDir = this.cache.get(Cache.outdir)
+    const distDir = this.cache.get(Cache.distdir)
     const zipFile = new ZipFile()
     Object.entries(bundle).forEach(([_, entry]) => {
       if (isAsset(entry)) {
@@ -50,7 +59,7 @@ export default (options?: IPluginOptions): Plugin => ({
         zipFile.addBuffer(buffer, fileName)
       } else {
         const {fileName} = entry
-        zipFile.addFile(path.resolve(outDir, fileName), fileName)
+        zipFile.addFile(path.resolve(distDir, fileName), fileName)
       }
     })
     const outFile = this.cache.get(Cache.outfile)
