@@ -52,7 +52,23 @@ string
 `${npm_package_name}-${npm_package_version}.zip` || `bundle-${npm_package_version}.zip` || 'bundle.zip'
 ```
 
-An optional name of the output zip file.
+Optional name or path to the output zip file. Relative paths are resolved in the Rollup destination directory.
+To change the destination directory without changing the file name use the [dir option](#dir).
+
+### dir
+
+#### Type
+
+```js
+string
+```
+
+#### Default
+
+Rollup destination directory if `file` is not set. If `file` is set then `dir` is ignored.
+
+Optional path to the directory where to write the output zip file.
+Relative paths are resolved in the package base directory.
 
 ## License
 
