@@ -14,17 +14,21 @@ interface IPluginOptions {
 const enum Cache {
   distdir = 'distdir',
   outfile = 'outfile',
+  sourcemapFile = 'sourcemapFile',
 }
 
 export default (options?: IPluginOptions): Plugin => ({
   name: 'zip',
-  generateBundle({dir}) {
+  generateBundle({dir, sourcemap, sourcemapFile}) {
     // Save the output directory path
     let distDir = process.cwd()
     if (dir) {
       distDir = path.resolve(distDir, dir)
     }
     this.cache.set(Cache.distdir, distDir)
+    if (sourcemap) {
+      this.cache.set(Cache.sourcemapFile, sourcemapFile)
+    }
     // Get options
     let outFile = options && options.file
     const outDir = options && options.dir
@@ -51,6 +55,7 @@ export default (options?: IPluginOptions): Plugin => ({
   },
   writeBundle(bundle) {
     const distDir = this.cache.get(Cache.distdir)
+    const sourcemapFile = this.cache.get(Cache.sourcemapFile)
     const zipFile = new ZipFile()
     Object.entries(bundle).forEach(([_, entry]) => {
       if (isAsset(entry)) {
@@ -62,6 +67,9 @@ export default (options?: IPluginOptions): Plugin => ({
         zipFile.addFile(path.resolve(distDir, fileName), fileName)
       }
     })
+    if (sourcemapFile) {
+      zipFile.addFile(path.resolve(distDir, sourcemapFile), sourcemapFile)
+    }
     const outFile = this.cache.get(Cache.outfile)
     zipFile.outputStream.pipe(fs.createWriteStream(outFile))
     zipFile.end()
