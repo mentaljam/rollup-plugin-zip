@@ -54,24 +54,28 @@ export default (options?: IPluginOptions): Plugin => ({
     this.cache.set(Cache.outfile, outFile)
   },
   writeBundle(bundle) {
-    const distDir = this.cache.get(Cache.distdir)
-    const sourcemapFile = this.cache.get(Cache.sourcemapFile)
-    const zipFile = new ZipFile()
-    Object.entries(bundle).forEach(([_, entry]) => {
-      if (isAsset(entry)) {
-        const {fileName, source} = entry
-        const buffer = Buffer.isBuffer(source) ? source : new Buffer(source)
-        zipFile.addBuffer(buffer, fileName)
-      } else {
-        const {fileName} = entry
-        zipFile.addFile(path.resolve(distDir, fileName), fileName)
+    return new Promise(resolve => {
+      const distDir = this.cache.get(Cache.distdir)
+      const sourcemapFile = this.cache.get(Cache.sourcemapFile)
+      const zipFile = new ZipFile()
+      Object.entries(bundle).forEach(([_, entry]) => {
+        if (isAsset(entry)) {
+          const {fileName, source} = entry
+          const buffer = Buffer.isBuffer(source) ? source : new Buffer(source)
+          zipFile.addBuffer(buffer, fileName)
+        } else {
+          const {fileName} = entry
+          zipFile.addFile(path.resolve(distDir, fileName), fileName)
+        }
+      })
+      if (sourcemapFile) {
+        zipFile.addFile(path.resolve(distDir, sourcemapFile), sourcemapFile)
       }
+      const outFile = this.cache.get(Cache.outfile)
+      const writeStream = fs.createWriteStream(outFile)
+      zipFile.outputStream.pipe(writeStream)
+      zipFile.end()
+      writeStream.on('close', resolve)
     })
-    if (sourcemapFile) {
-      zipFile.addFile(path.resolve(distDir, sourcemapFile), sourcemapFile)
-    }
-    const outFile = this.cache.get(Cache.outfile)
-    zipFile.outputStream.pipe(fs.createWriteStream(outFile))
-    zipFile.end()
   },
 })
