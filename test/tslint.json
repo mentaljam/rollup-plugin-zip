@@ -1,0 +1,9 @@
+{
+  "extends": [
+    "../tslint.json"
+  ],
+  "rules": {
+    "linebreak-style": [true, "LF"],
+    "no-console": [false]
+  }
+}

@@ -9,7 +9,6 @@
     ]
   },
   "rules": {
-    "linebreak-style": [true, "LF"],
-    "no-console": [false]
+    "linebreak-style": [true, "LF"]
   }
 }

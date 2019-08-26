@@ -38,7 +38,9 @@ config.push({
     'yazl',
   ],
   plugins: [
-    tslint(),
+    tslint({
+      tsConfigSearchPath: './test',
+    }),
     typescript({
       tsconfig: './test/tsconfig.json',
     }),
