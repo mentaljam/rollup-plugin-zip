@@ -4,7 +4,7 @@ import typescript from 'rollup-plugin-typescript2'
 
 const formats = ['cjs', 'es']
 
-export default formats.map(format => ({
+const config = formats.map(format => ({
   input: 'src/index.ts',
   output: {
     file: `dist/index.${format}.js`,
@@ -22,3 +22,27 @@ export default formats.map(format => ({
     }),
   ],
 }))
+
+config.push({
+  input: 'test/test.ts',
+  output: {
+    file: `test/test.js`,
+    format: 'cjs',
+  },
+  external: [
+    'colors',
+    'fs',
+    'path',
+    'rollup',
+    'yauzl',
+    'yazl',
+  ],
+  plugins: [
+    tslint(),
+    typescript({
+      tsconfig: './test/tsconfig.json',
+    }),
+  ],
+})
+
+export default config

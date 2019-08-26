@@ -4,10 +4,16 @@
     "target": "esnext",
     "moduleResolution": "node",
     "sourceMap": false,
-    "declaration": true,
+    "declaration": false,
     "strict": true,
     "noImplicitReturns": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": true
+    "noUnusedParameters": true,
+    "baseUrl": "..",
+    "paths": {
+      "rollup-plugin-zip": [
+        "./src"
+      ]
+    }
   }
 }
