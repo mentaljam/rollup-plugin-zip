@@ -38,6 +38,7 @@ const build = async <T>({
     chunkFileNames: '[name].js',
     dir: `test/dist/${dir}`,
     format: 'es',
+    sourcemap: true,
   })
 }
 
@@ -55,10 +56,14 @@ const promisedOpen = (
 const promisedReadEntries = (
   zipfile: yauzl.ZipFile,
 ): Promise<void> => new Promise((resolve, reject) => {
-  const expectedEntries = new Set([
+  const jsEntries = [
     'foo.js',
     'bar.js',
     'baz.js',
+  ]
+  const expectedEntries = new Set([
+    ...jsEntries,
+    ...jsEntries.map(e => e + '.map'),
   ])
   zipfile.readEntry()
   zipfile.on('entry', ({fileName: entryname}) => {

@@ -71,8 +71,12 @@ export default (options?: IPluginOptions): Plugin => ({
           const buffer = Buffer.isBuffer(source) ? source : new Buffer(source)
           zipFile.addBuffer(buffer, fileName)
         } else {
-          const {fileName} = entry
+          const {fileName, map} = entry
           zipFile.addFile(path.resolve(distDir, fileName), fileName)
+          if (map) {
+            const mapFile = fileName + '.map'
+            zipFile.addFile(path.resolve(distDir, mapFile), mapFile)
+          }
         }
       })
       if (sourcemapFile) {
