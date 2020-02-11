@@ -11,8 +11,10 @@ const PACKAGE_VERSION  = '1.0'
 const DEFAULT_FILENAME = `${PACKAGE_NAME}-${PACKAGE_VERSION}.zip`
 
 
+/* eslint-disable @typescript-eslint/camelcase */
 process.env.npm_package_name    = PACKAGE_NAME
 process.env.npm_package_version = PACKAGE_VERSION
+/* eslint-enable @typescript-eslint/camelcase */
 
 interface IBuildPars<T> {
   dir: string,
@@ -22,7 +24,7 @@ interface IBuildPars<T> {
 const build = async <T>({
   dir,
   options,
-}: IBuildPars<T>) => {
+}: IBuildPars<T>): Promise<void> => {
   const bundle = await rollup.rollup({
     input: [
       `test/src/bar.js`,
@@ -39,18 +41,20 @@ const build = async <T>({
   })
 }
 
-const promisedOpen = (path: string): Promise<yauzl.ZipFile> => {
-  return new Promise((resolve, reject) => {
-    yauzl.open(path, {lazyEntries: true, autoClose: true}, (err, zipfile) => {
-      if (err) {
-        return reject(err)
-      }
-      resolve(zipfile!)
-    })
+const promisedOpen = (
+  path: string,
+): Promise<yauzl.ZipFile> => new Promise((resolve, reject) => {
+  yauzl.open(path, {lazyEntries: true, autoClose: true}, (err, zipfile) => {
+    if (err) {
+      return reject(err)
+    }
+    resolve(zipfile)
   })
-}
+})
 
-const promisedReadEntries = (zipfile: yauzl.ZipFile) => new Promise((resolve, reject) => {
+const promisedReadEntries = (
+  zipfile: yauzl.ZipFile,
+): Promise<void> => new Promise((resolve, reject) => {
   const expectedEntries = new Set([
     'foo.js',
     'bar.js',
@@ -76,11 +80,11 @@ const promisedReadEntries = (zipfile: yauzl.ZipFile) => new Promise((resolve, re
 
 let ERROR_COUNT = 0
 
-const testCase = <T>(
+const testCase = async <T>(
   title: string,
   options: IBuildPars<T>,
   filename: string,
-) => new Promise(async (resolve) => {
+): Promise<void> => {
   title = `Testing ${title}`
   console.info(title)
   try {
@@ -95,8 +99,7 @@ const testCase = <T>(
     ERROR_COUNT += 1
     console.error(`${title} - ${error.message.red}`)
   }
-  resolve()
-})
+}
 
 Promise.all([
   testCase(

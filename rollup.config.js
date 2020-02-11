@@ -1,4 +1,3 @@
-import tslint from 'rollup-plugin-tslint'
 import typescript from 'rollup-plugin-typescript2'
 
 
@@ -16,7 +15,6 @@ const config = formats.map(format => ({
     'yazl',
   ],
   plugins: [
-    tslint(),
     typescript({
       tsconfig: './tsconfig.json',
     }),
@@ -38,9 +36,6 @@ config.push({
     'yazl',
   ],
   plugins: [
-    tslint({
-      tsConfigSearchPath: './test',
-    }),
     typescript({
       tsconfig: './test/tsconfig.json',
     }),

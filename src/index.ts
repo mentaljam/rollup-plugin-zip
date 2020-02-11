@@ -1,10 +1,12 @@
 import * as fs from 'fs'
 import * as path from 'path'
-import {OutputAsset, Plugin} from 'rollup'
+import {OutputAsset, OutputChunk, Plugin} from 'rollup'
 import {ZipFile} from 'yazl'
 
 
-const isAsset = (entry: any): entry is OutputAsset => !!entry.isAsset
+const isAsset = (entry: OutputAsset | OutputChunk): entry is OutputAsset => (
+  entry.type === 'asset'
+)
 
 interface IPluginOptions {
   file?: string
@@ -19,7 +21,8 @@ const enum Cache {
 
 export default (options?: IPluginOptions): Plugin => ({
   name: 'zip',
-  generateBundle({dir, sourcemap, sourcemapFile}) {
+
+  generateBundle({dir, sourcemap, sourcemapFile}): void {
     // Save the output directory path
     let distDir = process.cwd()
     if (dir) {
@@ -40,10 +43,13 @@ export default (options?: IPluginOptions): Plugin => ({
         outFile = path.resolve(distDir, outFile)
       }
     } else {
-      const {npm_package_name, npm_package_version} = process.env
-      outFile = npm_package_name || 'bundle'
-      if (npm_package_version) {
-        outFile += '-' + npm_package_version
+      const {
+        npm_package_name: packageName = 'bundle',
+        npm_package_version: packageVersion
+      } = process.env
+      outFile = packageName
+      if (packageVersion) {
+        outFile += '-' + packageVersion
       }
       if (outDir && !(fs.existsSync(outDir) && fs.statSync(outDir).isDirectory())) {
         fs.mkdirSync(outDir, {recursive: true})
@@ -53,12 +59,13 @@ export default (options?: IPluginOptions): Plugin => ({
     // Save the output file path
     this.cache.set(Cache.outfile, outFile)
   },
-  writeBundle(bundle) {
+
+  writeBundle(bundle): Promise<void> {
     return new Promise(resolve => {
       const distDir = this.cache.get(Cache.distdir)
       const sourcemapFile = this.cache.get(Cache.sourcemapFile)
       const zipFile = new ZipFile()
-      Object.entries(bundle).forEach(([_, entry]) => {
+      Object.entries(bundle).forEach(([, entry]) => {
         if (isAsset(entry)) {
           const {fileName, source} = entry
           const buffer = Buffer.isBuffer(source) ? source : new Buffer(source)
