@@ -9,7 +9,7 @@ devDependencies:
   colors: 1.4.0
   eslint: 6.8.0
   rollup: 1.31.0
-  rollup-plugin-typescript2: 0.24.3_rollup@1.31.0+typescript@3.7.5
+  rollup-plugin-typescript2: 0.25.3_rollup@1.31.0+typescript@3.7.5
   typescript: 3.7.5
   yauzl: 2.10.0
 lockfileVersion: 5.1
@@ -901,7 +901,7 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-mwqeW5XsA2qAejG46gYdENaxXjx9onRNCfn7L0duuP4hCuTIi/QO7PDK07KJfp1d+izWPrzEJDcSqBa0OZQriA==
-  /rollup-plugin-typescript2/0.24.3_rollup@1.31.0+typescript@3.7.5:
+  /rollup-plugin-typescript2/0.25.3_rollup@1.31.0+typescript@3.7.5:
     dependencies:
       find-cache-dir: 3.2.0
       fs-extra: 8.1.0
@@ -912,10 +912,10 @@ packages:
       typescript: 3.7.5
     dev: true
     peerDependencies:
-      rollup: '>=0.68.0'
+      rollup: '>=1.26.3'
       typescript: '>=2.4.0'
     resolution:
-      integrity: sha512-D7yovQlhnRoz7pG/RF0ni+koxgzEShwfAGuOq6OVqKzcATHOvmUt2ePeYVdc9N0adcW1PcTzklUEM0oNWE/POw==
+      integrity: sha512-ADkSaidKBovJmf5VBnZBZe+WzaZwofuvYdzGAKTN/J4hN7QJCFYAq7IrH9caxlru6T5qhX41PNFS1S4HqhsGQg==
   /rollup-pluginutils/2.8.1:
     dependencies:
       estree-walker: 0.6.1
@@ -1168,8 +1168,8 @@ specifiers:
   '@typescript-eslint/parser': ^2.19.2
   colors: ^1.4.0
   eslint: ^6.8.0
-  rollup: ^1.23.1
-  rollup-plugin-typescript2: ^0.24.3
-  typescript: ^3.6.4
+  rollup: ^1.31.0
+  rollup-plugin-typescript2: ^0.25.3
+  typescript: ^3.7.5
   yauzl: ^2.10.0
   yazl: ^2.5.1
