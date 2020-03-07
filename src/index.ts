@@ -60,7 +60,7 @@ export default (options?: IPluginOptions): Plugin => ({
     this.cache.set(Cache.outfile, outFile)
   },
 
-  writeBundle(bundle): Promise<void> {
+  writeBundle(_options, bundle): Promise<void> {
     return new Promise(resolve => {
       const distDir = this.cache.get(Cache.distdir)
       const sourcemapFile = this.cache.get(Cache.sourcemapFile)
@@ -68,7 +68,7 @@ export default (options?: IPluginOptions): Plugin => ({
       Object.entries(bundle).forEach(([, entry]) => {
         if (isAsset(entry)) {
           const {fileName, source} = entry
-          const buffer = Buffer.isBuffer(source) ? source : new Buffer(source)
+          const buffer = Buffer.from(source)
           zipFile.addBuffer(buffer, fileName)
         } else {
           const {fileName, map} = entry
