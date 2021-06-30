@@ -13,13 +13,15 @@ interface IPluginOptions {
   dir?: string
 }
 
+type RollupPluginZip = (options?: IPluginOptions) => Plugin
+
 const enum Cache {
   distdir = 'distdir',
   outfile = 'outfile',
   sourcemapFile = 'sourcemapFile',
 }
 
-export default (options?: IPluginOptions): Plugin => ({
+const zip: RollupPluginZip = (options) => ({
   name: 'zip',
 
   generateBundle({dir, sourcemap, sourcemapFile}): void {
@@ -90,3 +92,5 @@ export default (options?: IPluginOptions): Plugin => ({
     })
   },
 })
+
+export default zip

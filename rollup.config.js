@@ -8,6 +8,7 @@ const config = formats.map(format => ({
   output: {
     file: `dist/index.${format}.js`,
     format,
+    exports: 'auto',
   },
   external: [
     'fs',
