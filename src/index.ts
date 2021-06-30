@@ -64,8 +64,8 @@ const zip: RollupPluginZip = (options) => ({
 
   writeBundle(_options, bundle): Promise<void> {
     return new Promise(resolve => {
-      const distDir = this.cache.get(Cache.distdir)
-      const sourcemapFile = this.cache.get(Cache.sourcemapFile)
+      const distDir = this.cache.get<string>(Cache.distdir)
+      const sourcemapFile = this.cache.get<string>(Cache.sourcemapFile)
       const zipFile = new ZipFile()
       Object.entries(bundle).forEach(([, entry]) => {
         if (isAsset(entry)) {
@@ -84,7 +84,7 @@ const zip: RollupPluginZip = (options) => ({
       if (sourcemapFile) {
         zipFile.addFile(path.resolve(distDir, sourcemapFile), sourcemapFile)
       }
-      const outFile = this.cache.get(Cache.outfile)
+      const outFile = this.cache.get<string>(Cache.outfile)
       const writeStream = fs.createWriteStream(outFile)
       zipFile.outputStream.pipe(writeStream)
       zipFile.end()
