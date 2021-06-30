@@ -11,10 +11,8 @@ const PACKAGE_VERSION  = '1.0'
 const DEFAULT_FILENAME = `${PACKAGE_NAME}-${PACKAGE_VERSION}.zip`
 
 
-/* eslint-disable @typescript-eslint/camelcase */
 process.env.npm_package_name    = PACKAGE_NAME
 process.env.npm_package_version = PACKAGE_VERSION
-/* eslint-enable @typescript-eslint/camelcase */
 
 interface IBuildPars<T> {
   dir: string,
@@ -66,7 +64,7 @@ const promisedReadEntries = (
     ...jsEntries.map(e => e + '.map'),
   ])
   zipfile.readEntry()
-  zipfile.on('entry', ({fileName: entryname}) => {
+  zipfile.on('entry', ({fileName: entryname}: {fileName: string}) => {
     if (expectedEntries.has(entryname)) {
       expectedEntries.delete(entryname)
     } else {
@@ -78,6 +76,7 @@ const promisedReadEntries = (
     if (expectedEntries.size === 0) {
       resolve()
     } else {
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
       reject(new Error(`not all expected entries are presented in the zip file: [${[...expectedEntries]}]`))
     }
   })
@@ -102,11 +101,11 @@ const testCase = async <T>(
     console.info(`${title} - ${'Success'.green}`)
   } catch (error) {
     ERROR_COUNT += 1
-    console.error(`${title} - ${error.message.red}`)
+    console.error(`${title} - ${(error as Error).message.red}`)
   }
 }
 
-Promise.all([
+void Promise.all([
   testCase(
     'without options',
     {
