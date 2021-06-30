@@ -46,7 +46,7 @@ const promisedOpen = (
   path: string,
 ): Promise<yauzl.ZipFile> => new Promise((resolve, reject) => {
   yauzl.open(path, {lazyEntries: true, autoClose: true}, (err, zipfile) => {
-    if (err) {
+    if (err || !zipfile) {
       return reject(err)
     }
     resolve(zipfile)
