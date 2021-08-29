@@ -35,8 +35,8 @@ const zip: RollupPluginZip = (options) => ({
       this.cache.set(Cache.sourcemapFile, sourcemapFile)
     }
     // Get options
-    let outFile  = options?.file
-    const outDir = options?.dir
+    let outFile = options && options.file
+    const outDir = options && options.dir
     if (outFile) {
       if (outDir) {
         this.warn('Both the `file` and `dir` options are set - `dir` has no effect')
