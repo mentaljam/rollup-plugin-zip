@@ -1,9 +1,12 @@
 import typescript from 'rollup-plugin-typescript2'
 
 
-const formats = ['cjs', 'es']
+const formats = [
+  ['cjs', 'ES2019'],
+  ['es',  'ESNext'],
+]
 
-const config = formats.map(format => ({
+const config = formats.map(([format, target]) => ({
   input: 'src/index.ts',
   output: {
     file: `dist/index.${format}.js`,
@@ -18,6 +21,11 @@ const config = formats.map(format => ({
   plugins: [
     typescript({
       tsconfig: './tsconfig.json',
+      tsconfigOverride: {
+        compilerOptions: {
+          target,
+        },
+      },
     }),
   ],
 }))
